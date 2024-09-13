@@ -1,7 +1,9 @@
 package main
 
 import (
-	"github.com/ayushh2k/21BKT0080_Backend/initializers"
+	"github.com/ayushh2k/21BKT0080_Backend/internal/handlers"
+	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
+	"github.com/ayushh2k/21BKT0080_Backend/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +14,8 @@ func init() {
 
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "21BKT0080 Ayush Mishra, Trademarkia Backend Task",
-		})
-	})
+	r.POST("/register", handlers.Signup)
+	r.POST("/login", handlers.Login)
+	r.GET("/test", middleware.AuthMiddleware, handlers.TestLogin)
 	r.Run()
 }

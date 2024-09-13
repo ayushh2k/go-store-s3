@@ -1,3 +1,4 @@
+// internal/initializers/connectToDb.go
 package initializers
 
 import (
@@ -5,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/ayushh2k/21BKT0080_Backend/models"
+	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
