@@ -1,6 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/ayushh2k/21BKT0080_Backend/initializers"
+	"github.com/gin-gonic/gin"
+)
+
+func init() {
+	initializers.LoadEnv()
+	initializers.ConnectToDb()
+}
 
 func main() {
 	r := gin.Default()
@@ -9,5 +17,5 @@ func main() {
 			"message": "21BKT0080 Ayush Mishra, Trademarkia Backend Task",
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.Run()
 }
