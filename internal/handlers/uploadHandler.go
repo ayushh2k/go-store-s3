@@ -14,6 +14,7 @@ import (
 	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
 	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -121,6 +122,7 @@ func UploadFile(c *gin.Context) {
 		uploadDate := time.Now()
 		s3URL := fmt.Sprintf("%s/%s/%s", initializers.S3Client.EndpointURL().String(), bucketName, objectName)
 		fileMetadata := models.FileMetadata{
+			ID:          uuid.New(),
 			FileName:    objectName,
 			FileURL:     s3URL,
 			FileSize:    uploadInfo.Size,

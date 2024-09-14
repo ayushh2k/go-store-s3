@@ -14,6 +14,7 @@ func init() {
 	initializers.LoadEnv()
 	initializers.ConnectToDb()
 	initializers.ConnectS3()
+	initializers.ConnectRedis()
 	initializers.SyncDatabase()
 }
 
@@ -23,6 +24,8 @@ func main() {
 	r.POST("/login", handlers.Login)
 	r.GET("/test", middleware.AuthMiddleware, handlers.TestLogin)
 	r.POST("/upload", middleware.AuthMiddleware, handlers.UploadFile)
+	r.GET("/files", middleware.AuthMiddleware, handlers.GetFiles)
+	r.GET("/share/:file_id", middleware.AuthMiddleware, handlers.ShareFile)
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

@@ -2,12 +2,15 @@
 package initializers
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -62,4 +65,26 @@ func ConnectS3() {
 
 	S3Client = client
 	log.Println("Connected to S3 successfully")
+}
+
+var RedisClient *redis.Client
+
+func ConnectRedis() {
+	redisHost := os.Getenv("REDIS_HOST")
+	redisPort := os.Getenv("REDIS_PORT")
+	redisDB, err := strconv.Atoi(os.Getenv("REDIS_DB"))
+	if err != nil {
+		log.Fatalf("Failed to parse REDIS_DB: %v", err)
+	}
+
+	RedisClient = redis.NewClient(&redis.Options{
+		Addr:     redisHost + ":" + redisPort,
+		Password: os.Getenv("REDIS_PASSWORD"),
+		DB:       redisDB,
+	})
+
+	_, err = RedisClient.Ping(context.Background()).Result()
+	if err != nil {
+		log.Fatalf("Failed to connect to Redis: %v", err)
+	}
 }

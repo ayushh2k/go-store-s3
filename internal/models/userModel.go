@@ -12,7 +12,7 @@ type User struct {
 	Password string    `gorm:"not null"`
 }
 
-// BeforeCreate will set a UUID rather than numeric ID.
+// Creates the uuid for the user
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
 	user.ID = uuid.New()
 	return
