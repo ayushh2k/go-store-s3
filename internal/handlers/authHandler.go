@@ -1,4 +1,4 @@
-// internal/handlers/auth.go
+// internal/handlers/authHandler.go
 package handlers
 
 import (
@@ -99,19 +99,6 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-
-	// Store the JWT token in the database
-	// user.Token = tokenString
-	// if err := initializers.DB.Db.Save(&user).Error; err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{
-	// 		"error": "Failed to save token in database",
-	// 	})
-	// 	return
-	// }
-
-	//Store the JWT token as a cookie
-	// c.SetSameSite(http.SameSiteLaxMode)
-	// c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 
 	// Respond with the token
 	c.JSON(http.StatusOK, gin.H{

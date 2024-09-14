@@ -1,11 +1,19 @@
 // internal/models/userModel.go
 package models
 
-import "gorm.io/gorm"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type User struct {
-	gorm.Model
-	Email    string `gorm:"unique"`
-	Password string
-	// Token    string
+	ID       uuid.UUID `gorm:"type:uuid;primaryKey;"`
+	Email    string    `gorm:"uniqueIndex;not null"`
+	Password string    `gorm:"not null"`
+}
+
+// BeforeCreate will set a UUID rather than numeric ID.
+func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
+	user.ID = uuid.New()
+	return
 }

@@ -1,5 +1,4 @@
 // internal/middleware/authMiddleware.go
-
 package middleware
 
 import (
@@ -13,10 +12,10 @@ import (
 	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 func AuthMiddleware(c *gin.Context) {
-
 	authHeader := c.GetHeader("Authorization")
 	if authHeader == "" {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
@@ -24,14 +23,12 @@ func AuthMiddleware(c *gin.Context) {
 		})
 		return
 	}
-
 	if !strings.HasPrefix(authHeader, "Bearer ") {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error": "Invalid token format",
 		})
 		return
 	}
-
 	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
 	// Parse the JWT token
@@ -58,11 +55,33 @@ func AuthMiddleware(c *gin.Context) {
 			return
 		}
 
+		// Extract the user ID from the claims
+		var userIDString string
+		switch sub := claims["sub"].(type) {
+		case string:
+			userIDString = sub
+		case float64:
+			userIDString = fmt.Sprintf("%f", sub)
+		default:
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "Invalid user ID in token",
+			})
+			return
+		}
+
+		userID, err := uuid.Parse(userIDString)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+				"error": "Invalid user ID in token",
+			})
+			return
+		}
+
 		var user models.User
-		initializers.DB.Db.First(&user, claims["sub"])
+		result := initializers.DB.Db.First(&user, "id = ?", userID)
 
 		// Check if user exists
-		if user.ID == 0 {
+		if result.Error != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"error": "User not found",
 			})
@@ -70,7 +89,6 @@ func AuthMiddleware(c *gin.Context) {
 		}
 
 		c.Set("user", user)
-
 		c.Next()
 	} else {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{

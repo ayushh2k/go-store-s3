@@ -1,3 +1,4 @@
+// cmd/main.go
 package main
 
 import (
@@ -13,6 +14,7 @@ func init() {
 	initializers.LoadEnv()
 	initializers.ConnectToDb()
 	initializers.ConnectS3()
+	initializers.SyncDatabase()
 }
 
 func main() {
@@ -28,5 +30,5 @@ func main() {
 		})
 	})
 
-	r.Run()
+	r.Run(":8080")
 }
