@@ -1,6 +1,6 @@
 # Trademarkia Backend Task: 21BKT0080 Ayush Mishra
 
-This project is a backend application developed as part of the Trademarkia Backend Task. It includes user authentication, file upload, file sharing, and other related functionalities. The application is built using Go, Gin, PostgreSQL, Redis, and MinIO (S3-compatible storage).
+This project is a backend application developed as part of the Trademarkia Backend Task. It includes user authentication, file upload, file sharing, and other related functionalities. The application is built using Go, Gin, PostgreSQL, Redis, and MinIO (For AWS S3 operations).
 
 ## Table of Contents
 
@@ -9,31 +9,44 @@ This project is a backend application developed as part of the Trademarkia Backe
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Running the Application](#running-the-application)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Hosting on EC2](#hosting-on-ec2)
-- [Contributing](#contributing)
-- [License](#license)
+- [API Documentation](#api-documentation)
+- [Hosted Link](#hosted-link)
 
 ## Features
 
-- **User Authentication**:
-  - User registration and login.
-  - JWT-based authentication.
+- **User Authentication & Authorization**:
+  - [x] User registration and login.
+  - [x] JWT-based authentication.
 
-- **File Management**:
-  - Upload files to S3-compatible storage (MinIO).
-  - Retrieve a list of uploaded files.
-  - Share files via pre-signed URLs.
-  - Delete files.
-  - Update file metadata.
-  - Search files.
+- **File Upload & Management**:
+  - [x] Upload files to S3.
+  - [x] Delete files.
+  - [x] Update file metadata.
 
-- **Background Workers**:
-  - File deletion worker.
+- **File Retrieval & Sharing**:
+  - [x] Retrieve a list of user's uploaded files.
+  - [x] Share files via pre-signed URLs.
 
-- **Websockets**:
-  - Real-time notifications.
+- **File Search**:
+  - [x] Search files.
+
+- **Caching Layer for File Metadata**:
+  - [x] Use Redis for caching file metadata.
+
+- **Database Interaction**:
+  - [x] Use PostgreSQL for storing user and file metadata.
+
+- **Background Job for File Deletion**:
+  - [x] File expiration deletion worker.
+
+- **Testing**:
+  - [x] Tests for API endpoints.
+
+- **Bonus Tasks (Optional)**:
+  - [ ] WebSocket for Real-Time File Upload Notifications.
+  - [ ] File Encryption.
+  - [x] Hosting.
+  - [x] Implement Rate Limiting.
 
 ## Prerequisites
 
@@ -49,12 +62,11 @@ This project is a backend application developed as part of the Trademarkia Backe
 1. **Clone the Repository**:
    ```sh
    git clone https://github.com/ayushh2k/21BKT0080_Backend.git
-   cd 21BKT0080_Backend
    ```
 
-2. **Install Dependencies**:
+2. **Change Directory**:
    ```sh
-   go mod download
+   cd 21BKT0080_Backend
    ```
 
 ## Configuration
@@ -63,11 +75,25 @@ This project is a backend application developed as part of the Trademarkia Backe
    - Create a `.env` file in the root directory of the project.
    - Add the following environment variables:
      ```env
-     DB_USER=your_db_user
-     DB_PASSWORD=your_db_password
-     DB_NAME=your_db_name
+     # Database credentials
+     DB_USER=user_name
+     DB_PASSWORD=password
+     DB_NAME=databse_name
+   
+     # JWT secret
+     JWT_SECRET=your_jwt_secret
+
+     # S3 credentials
+     S3_ENDPOINT=your_s3_endpoint_without_protocol
+     S3_ACCESS_KEY=your_s3_access_key
+     S3_SECRET_KEY=your_s3_secret_key
      S3_BUCKET_NAME=your_s3_bucket_name
-     REDIS_URL=redis://redis:6379
+
+     # Redis credentials
+     REDIS_HOST=redis_host
+     REDIS_PASSWORD=password
+     REDIS_PORT=6379
+     REDIS_DB=0
      ```
 
 2. **Docker Compose**:
@@ -77,37 +103,17 @@ This project is a backend application developed as part of the Trademarkia Backe
 
 1. **Build and Run Using Docker Compose**:
    ```sh
-   sudo docker-compose up --build
-   ```
-
-2. **Run Locally**:
-   ```sh
-   go run cmd/main.go
-   ```
-
-## Testing
-
-1. **Run Tests**:
-   ```sh
-   go test ./internal/test
-   ```
-
-## Deployment
-
-1. **Build Docker Image**:
-   ```sh
-   sudo docker build -t your-image-name .
-   ```
-
-2. **Push Docker Image**:
-   ```sh
-   sudo docker push your-image-name
-   ```
-
-3. **Deploy Using Docker Compose**:
-   ```sh
    sudo docker-compose up --build -d
    ```
 
+## API Documentation
+
+For detailed API documentation, please refer to the [Postman Collection](https://documenter.getpostman.com/view/25648449/2sAXqp83yv).
+
+## Hosted Link
+
+The application is hosted on  AWS. You can access it using the following link: [Hosted Application](http://13.126.67.216/)
 
 ---
+
+By following this README, you should be able to set up and run the Trademarkia Backend Task application. If you encounter any issues, please refer to the documentation or open an issue on the repository.

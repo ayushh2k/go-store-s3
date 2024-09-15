@@ -40,6 +40,8 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Trademarkia Backend Task: 21BKT0080 Ayush Mishra",
+			"github":  "https://github.com/ayushh2k/21BKT0080_Backend",
+			"docs":    "https://documenter.getpostman.com/view/25648449/2sAXqp83yv",
 		})
 	})
 
