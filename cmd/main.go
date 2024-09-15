@@ -26,6 +26,8 @@ func main() {
 	r.POST("/upload", middleware.AuthMiddleware, handlers.UploadFile)
 	r.GET("/files", middleware.AuthMiddleware, handlers.GetFiles)
 	r.GET("/share/:file_id", middleware.AuthMiddleware, handlers.ShareFile)
+	r.DELETE("/files/:file_id", middleware.AuthMiddleware, handlers.DeleteFile)
+	r.PUT("/files/:file_id", middleware.AuthMiddleware, handlers.UpdateFileInfo)
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

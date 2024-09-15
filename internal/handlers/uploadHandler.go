@@ -55,6 +55,14 @@ func UploadFile(c *gin.Context) {
 	// Include the user's ID in the object name
 	objectName = fmt.Sprintf("%s/%s", userObj.ID.String(), objectName)
 
+	// Check if the file already exists in the database
+	var existingFile models.FileMetadata
+	result := initializers.DB.Db.Where("file_name = ? AND user_id = ?", objectName, userObj.ID).First(&existingFile)
+	if result.Error == nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "File already exists"})
+		return
+	}
+
 	if err := ensureBucketExists(ctx, bucketName); err != nil {
 		log.Printf("Failed to ensure bucket exists: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to ensure bucket exists"})
@@ -133,6 +141,20 @@ func UploadFile(c *gin.Context) {
 		result := initializers.DB.Db.Create(&fileMetadata)
 		if result.Error != nil {
 			log.Printf("Failed to save file metadata: %v", result.Error)
+		}
+
+		// Delete the cache entry for the user's files
+		cacheKey := "files:" + userObj.ID.String()
+		err := initializers.RedisClient.Del(context.Background(), cacheKey).Err()
+		if err != nil {
+			log.Printf("Failed to delete cache entry: %v", err)
+		}
+
+		// Delete the shared link cache entry if it exists
+		sharedLinkCacheKey := "shared_link:" + fileMetadata.ID.String()
+		err = initializers.RedisClient.Del(context.Background(), sharedLinkCacheKey).Err()
+		if err != nil {
+			log.Printf("Failed to delete shared link cache entry: %v", err)
 		}
 	}()
 
