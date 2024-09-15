@@ -23,13 +23,13 @@ func main() {
 	r := gin.Default()
 	r.POST("/register", handlers.Signup)
 	r.POST("/login", handlers.Login)
-	r.GET("/test", middleware.AuthMiddleware, handlers.TestLogin)
-	r.POST("/upload", middleware.AuthMiddleware, handlers.UploadFile)
-	r.GET("/files", middleware.AuthMiddleware, handlers.GetFiles)
-	r.GET("/share/:file_id", middleware.AuthMiddleware, handlers.ShareFile)
-	r.DELETE("/files/:file_id", middleware.AuthMiddleware, handlers.DeleteFile)
-	r.PUT("/files/:file_id", middleware.AuthMiddleware, handlers.UpdateFileInfo)
-	r.GET("/search", middleware.AuthMiddleware, handlers.SearchFiles)
+	r.GET("/test", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.TestLogin)
+	r.POST("/upload", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.UploadFile)
+	r.GET("/files", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.GetFiles)
+	r.GET("/share/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.ShareFile)
+	r.DELETE("/files/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.DeleteFile)
+	r.PUT("/files/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.UpdateFileInfo)
+	r.GET("/search", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.SearchFiles)
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
