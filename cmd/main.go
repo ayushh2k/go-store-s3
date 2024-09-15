@@ -21,14 +21,20 @@ func init() {
 
 func main() {
 	r := gin.Default()
+
+	// handlers.InitHub()
+
+	// Authentication routes
 	r.POST("/register", handlers.Signup)
 	r.POST("/login", handlers.Login)
-	r.GET("/test", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.TestLogin)
-	r.POST("/upload", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.UploadFile)
-	r.GET("/files", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.GetFiles)
-	r.GET("/share/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.ShareFile)
-	r.DELETE("/files/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.DeleteFile)
-	r.PUT("/files/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.UpdateFileInfo)
+
+	// File routes
+	r.POST("/upload", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.UploadFile)            //upload
+	r.GET("/files", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.GetFiles)                //get all files
+	r.GET("/share/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.ShareFile)      //share file
+	r.DELETE("/files/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.DeleteFile)  //delete file
+	r.PUT("/files/:file_id", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.UpdateFileInfo) //update file info
+
 	r.GET("/search", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.SearchFiles)
 
 	r.GET("/", func(c *gin.Context) {
@@ -37,7 +43,14 @@ func main() {
 		})
 	})
 
+	// Websockets
+	// var hub *ws.Hub
+	// r.GET("/ws", middleware.AuthMiddleware, func(c *gin.Context) {
+	// 	handlers.ServeWs(hub, c)
+	// })
+
 	// Start the background worker for file deletion
 	go workers.StartFileDeletionWorker()
+
 	r.Run(":8080")
 }

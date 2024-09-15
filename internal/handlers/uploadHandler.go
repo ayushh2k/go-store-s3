@@ -20,6 +20,14 @@ import (
 
 const chunkSize = 5 * 1024 * 1024 // 5MB chunks
 
+// Websockets
+// var hub *ws.Hub
+
+// func InitHub() {
+// 	hub = ws.NewHub()
+// 	go hub.Run()
+// }
+
 func UploadFile(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
 	defer cancel()
@@ -63,6 +71,7 @@ func UploadFile(c *gin.Context) {
 		return
 	}
 
+	// Ensure the bucket exists, create it if it doesn't
 	if err := ensureBucketExists(ctx, bucketName); err != nil {
 		log.Printf("Failed to ensure bucket exists: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to ensure bucket exists"})
@@ -156,6 +165,12 @@ func UploadFile(c *gin.Context) {
 		if err != nil {
 			log.Printf("Failed to delete shared link cache entry: %v", err)
 		}
+
+		// Notify the user via WebSocket
+		// if client, ok := hub.Clients[userObj.ID]; ok {
+		// 	message := []byte(fmt.Sprintf("File upload completed: %s", objectName))
+		// 	client.Send <- message
+		// }
 	}()
 
 	// Invalidate the cache for the user's search results

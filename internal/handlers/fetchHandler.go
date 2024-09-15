@@ -1,4 +1,4 @@
-// internal/handlers/fileHandler.go
+// internal/handlers/fetchHandler.go
 package handlers
 
 import (
