@@ -2,6 +2,8 @@
 package handlers
 
 import (
+	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -9,6 +11,8 @@ import (
 	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
 	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/redis/go-redis/v9"
 )
 
 type SearchFilesRequest struct {
@@ -33,6 +37,20 @@ func SearchFiles(c *gin.Context) {
 	if err := c.ShouldBindQuery(&searchRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid search parameters"})
 		return
+	}
+
+	// Generate a cache key based on the search parameters
+	cacheKey := generateCacheKey(userObj.ID, searchRequest)
+
+	// Try to get the cached results
+	cachedFiles, err := getCachedSearchResults(c.Request.Context(), cacheKey)
+	if err == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"files": cachedFiles,
+		})
+		return
+	} else if err != redis.Nil {
+		log.Printf("Failed to get cached search results: %v", err)
 	}
 
 	var files []models.FileMetadata
@@ -61,7 +79,48 @@ func SearchFiles(c *gin.Context) {
 		return
 	}
 
+	// Cache the search results
+	err = cacheSearchResults(c.Request.Context(), cacheKey, files)
+	if err != nil {
+		log.Printf("Failed to cache search results: %v", err)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"files": files,
 	})
+}
+
+func generateCacheKey(userID uuid.UUID, searchRequest SearchFilesRequest) string {
+	return "search_results:" + userID.String() + ":" + searchRequest.FileName + ":" + searchRequest.UploadedAt + ":" + searchRequest.ContentType
+}
+
+func getCachedSearchResults(ctx context.Context, cacheKey string) ([]models.FileMetadata, error) {
+	cachedData, err := initializers.RedisClient.Get(ctx, cacheKey).Result()
+	if err == redis.Nil {
+		return nil, err
+	} else if err != nil {
+		return nil, err
+	}
+
+	var files []models.FileMetadata
+	err = json.Unmarshal([]byte(cachedData), &files)
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
+func cacheSearchResults(ctx context.Context, cacheKey string, files []models.FileMetadata) error {
+	jsonData, err := json.Marshal(files)
+	if err != nil {
+		return err
+	}
+
+	err = initializers.RedisClient.Set(ctx, cacheKey, jsonData, 1*time.Minute).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/ayushh2k/21BKT0080_Backend/internal/handlers"
 	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
 	"github.com/ayushh2k/21BKT0080_Backend/internal/middleware"
+	"github.com/ayushh2k/21BKT0080_Backend/internal/workers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -36,5 +37,7 @@ func main() {
 		})
 	})
 
+	// Start the background worker for file deletion
+	go workers.StartFileDeletionWorker()
 	r.Run(":8080")
 }

@@ -93,6 +93,9 @@ func UpdateFileInfo(c *gin.Context) {
 		log.Printf("Failed to delete shared link cache entry: %v", err)
 	}
 
+	// Invalidate the cache for the user's search results
+	invalidateCache(context.Background(), fileMetadata.UserID)
+
 	c.JSON(http.StatusOK, gin.H{
 		"message":   "File info updated successfully",
 		"file_id":   fileMetadata.ID,

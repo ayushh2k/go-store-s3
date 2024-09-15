@@ -158,6 +158,9 @@ func UploadFile(c *gin.Context) {
 		}
 	}()
 
+	// Invalidate the cache for the user's search results
+	invalidateCache(context.Background(), userObj.ID)
+
 	c.JSON(http.StatusOK, gin.H{
 		"message":    "File uploaded successfully",
 		"filename":   objectName,
@@ -178,4 +181,18 @@ func ensureBucketExists(ctx context.Context, bucketName string) error {
 		}
 	}
 	return nil
+}
+
+func invalidateCache(ctx context.Context, userID uuid.UUID) {
+	cacheKeyPattern := "search_results:" + userID.String() + ":*"
+	iter := initializers.RedisClient.Scan(ctx, 0, cacheKeyPattern, 0).Iterator()
+	for iter.Next(ctx) {
+		err := initializers.RedisClient.Del(ctx, iter.Val()).Err()
+		if err != nil {
+			log.Printf("Failed to delete cache entry: %v", err)
+		}
+	}
+	if err := iter.Err(); err != nil {
+		log.Printf("Failed to iterate over cache keys: %v", err)
+	}
 }

@@ -46,6 +46,9 @@ func DeleteFile(c *gin.Context) {
 		return
 	}
 
+	// Invalidate the cache for the user's search results
+	invalidateCache(context.Background(), fileMetadata.UserID)
+
 	// Delete the cache entry for the user's files
 	cacheKey := "files:" + fileMetadata.UserID.String()
 	err = initializers.RedisClient.Del(context.Background(), cacheKey).Err()
