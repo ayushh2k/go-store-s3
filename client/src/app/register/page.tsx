@@ -10,8 +10,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [Email, setEmail] = useState('')
+  const [Password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -22,10 +22,10 @@ export default function RegisterPage() {
     setError('')
 
     try {
-      const response = await fetch('https://your-aws-api-url.com/register', {
+      const response = await fetch('http://localhost:8080/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ Email, Password }),
       })
 
       if (response.ok) {
@@ -36,6 +36,7 @@ export default function RegisterPage() {
       }
     } catch (err) {
       setError('An error occurred. Please try again.')
+      console.error(err)
     } finally {
       setIsLoading(false)
     }
@@ -57,7 +58,7 @@ export default function RegisterPage() {
                   id="email" 
                   type="email" 
                   placeholder="Enter your email" 
-                  value={email} 
+                  value={Email} 
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
                 />
@@ -68,7 +69,7 @@ export default function RegisterPage() {
                   id="password" 
                   type="password" 
                   placeholder="Enter your password" 
-                  value={password} 
+                  value={Password} 
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                 />

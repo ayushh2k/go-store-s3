@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('https://your-aws-api-url.com/login', {
+      const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
