@@ -14,8 +14,8 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   return response.json();
 }
 
-export async function fetchFiles() {
-  return fetchWithAuth('/files');
+export async function fetchFiles(url = `${API_URL}/files`) {
+  return fetchWithAuth(url.replace(API_URL, ''));
 }
 
 export async function uploadFile(file: File) {
@@ -32,6 +32,12 @@ export async function shareFile(fileId: string) {
   return fetchWithAuth(`/share/${fileId}`);
 }
 
-export async function searchFiles(query: string) {
-  return fetchWithAuth(`/search?q=${encodeURIComponent(query)}`);
+export async function searchFiles(fileName: string, uploadedAt: string, contentType: string) {
+  const searchParams = new URLSearchParams();
+  if (fileName) searchParams.append('file_name', fileName);
+  if (uploadedAt) searchParams.append('uploaded_at', uploadedAt);
+  if (contentType && contentType !== 'all') searchParams.append('content_type', contentType);
+  
+  const searchUrl = `/search?${searchParams.toString()}`;
+  return fetchWithAuth(searchUrl);
 }
