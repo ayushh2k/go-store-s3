@@ -41,3 +41,39 @@ export async function searchFiles(fileName: string, uploadedAt: string, contentT
   const searchUrl = `/search?${searchParams.toString()}`;
   return fetchWithAuth(searchUrl);
 }
+
+export const updateFile = async (fileId: string, data: { file_name: string }) => {
+  const response = await fetch(`http://localhost:8080/files/${fileId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update file');
+  }
+
+  return await response.json();
+};
+
+export async function fetchUserInfo() {
+  try {
+    const [emailResponse, filesResponse, storageResponse] = await Promise.all([
+      fetchWithAuth('/user/email'),
+      fetchWithAuth('/user/total-files'),
+      fetchWithAuth('/user/storage-used')
+    ]);
+
+    return {
+      email: emailResponse.email,
+      totalFiles: filesResponse.total_files,
+      storageUsed: storageResponse.storage_used,
+    };
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    throw error;
+  }
+}

@@ -2,20 +2,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { fetchFiles, deleteFile, shareFile } from '@/lib/api'
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { fetchFiles } from '@/lib/api'
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Loader2, Copy, Check } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import FileRow from './FileRow'
+import DeleteDialog from './DeleteDialog'
+import ShareDialog from './ShareDialog'
+import UpdateDialog from './UpdateDialog'
 
 interface FileData {
   ID: string;
@@ -41,13 +34,9 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
   const [files, setFiles] = useState<FileData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [shareDialogOpen, setShareDialogOpen] = useState(false)
   const [fileToDelete, setFileToDelete] = useState<FileData | null>(null)
-  const [shareLink, setShareLink] = useState<string>('')
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isSharing, setIsSharing] = useState(false)
-  const [isCopied, setIsCopied] = useState(false)
+  const [fileToShare, setFileToShare] = useState<FileData | null>(null)
+  const [fileToUpdate, setFileToUpdate] = useState<FileData | null>(null)
 
   useEffect(() => {
     loadFiles()
@@ -87,51 +76,6 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
     }
   }
 
-  const handleDeleteClick = (file: FileData) => {
-    setFileToDelete(file)
-    setDeleteDialogOpen(true)
-  }
-
-  const handleDeleteConfirm = async () => {
-    if (fileToDelete) {
-      setIsDeleting(true)
-      try {
-        await deleteFile(fileToDelete.ID)
-        setDeleteDialogOpen(false)
-        await loadFiles()
-      } catch (error) {
-        console.error('Failed to delete file:', error)
-        setError('Failed to delete file. Please try again.')
-      } finally {
-        setIsDeleting(false)
-      }
-    }
-  }
-
-  const handleShare = async (fileId: string) => {
-    setIsSharing(true)
-    try {
-      const link = await shareFile(fileId)
-      setShareLink(`http://localhost:8080/share/${link}`)
-      setShareDialogOpen(true)
-    } catch (error) {
-      console.error('Failed to share file:', error)
-      setError('Failed to share file. Please try again.')
-    } finally {
-      setIsSharing(false)
-    }
-  }
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(shareLink)
-      setIsCopied(true)
-      setTimeout(() => setIsCopied(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy: ', err)
-    }
-  }
-
   if (isLoading) {
     return <div>Loading files...</div>
   }
@@ -168,73 +112,39 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
         </TableHeader>
         <TableBody>
           {files.map((file) => (
-            <TableRow key={file.ID}>
-              <TableCell>{file.FileName.split('/').pop()}</TableCell>
-              <TableCell>{(file.FileSize / 1024 / 1024).toFixed(2)} MB</TableCell>
-              <TableCell>{file.ContentType}</TableCell>
-              <TableCell>{new Date(file.UploadedAt).toLocaleString()}</TableCell>
-              <TableCell>
-                <Button variant="outline" size="sm" onClick={() => handleShare(file.ID)} disabled={isSharing}>
-                  {isSharing ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Share'}
-                </Button>
-                <Button variant="destructive" size="sm" onClick={() => handleDeleteClick(file)}>Delete</Button>
-              </TableCell>
-            </TableRow>
+            <FileRow
+              key={file.ID}
+              file={file}
+              onDelete={() => setFileToDelete(file)}
+              onShare={() => setFileToShare(file)}
+              onUpdate={() => setFileToUpdate(file)}
+            />
           ))}
         </TableBody>
       </Table>
 
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] bg-background bg-neutral-800 border-neutral-700">
-          <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
-            <DialogDescription className='text-white'>
-              Are you sure you want to delete the file "{fileToDelete?.FileName.split('/').pop()}"? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} disabled={isDeleting}>Cancel</Button>
-            <Button variant="destructive" onClick={handleDeleteConfirm} disabled={isDeleting}>
-              {isDeleting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                'Delete'
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteDialog
+        file={fileToDelete}
+        onClose={() => setFileToDelete(null)}
+        onDelete={async () => {
+          await loadFiles()
+          setFileToDelete(null)
+        }}
+      />
 
-      <Dialog open={shareDialogOpen} onOpenChange={setShareDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] bg-background bg-neutral-800 border-neutral-700">
-          <DialogHeader>
-            <DialogTitle>Share File</DialogTitle>
-            <DialogDescription className='text-white'>
-              Copy the link below to share your file:
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex items-center space-x-2">
-            <Input
-              readOnly
-              value={shareLink}
-              className="flex-1"
-            />
-            <Button size="sm" onClick={handleCopy}>
-              {isCopied ? (
-                <Check className="h-4 w-4" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShareDialogOpen(false)}>Close</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ShareDialog
+        file={fileToShare}
+        onClose={() => setFileToShare(null)}
+      />
+
+      <UpdateDialog
+        file={fileToUpdate}
+        onClose={() => setFileToUpdate(null)}
+        onUpdate={async () => {
+          await loadFiles()
+          setFileToUpdate(null)
+        }}
+      />
     </>
   )
 }

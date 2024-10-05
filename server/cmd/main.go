@@ -38,6 +38,10 @@ func main() {
 
 	r.GET("/search", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.SearchFiles)
 
+	r.GET("/user/email", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.GetUserEmail)
+	r.GET("/user/total-files", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.GetTotalFiles)
+	r.GET("/user/storage-used", middleware.AuthMiddleware, middleware.RateLimitMiddleware(), handlers.GetStorageUsed)
+
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "Trademarkia Backend Task: 21BKT0080 Ayush Mishra",
