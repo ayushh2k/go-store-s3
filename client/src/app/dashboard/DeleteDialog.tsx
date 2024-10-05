@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Loader2 } from "lucide-react"
+import { Loader2, AlertTriangle } from "lucide-react"
 import { deleteFile } from '@/lib/api'
 
 interface DeleteDialogProps {
@@ -31,22 +31,38 @@ export default function DeleteDialog({ file, onClose, onDelete }: DeleteDialogPr
         console.error('Failed to delete file:', error)
       } finally {
         setIsDeleting(false)
+        onClose()
       }
     }
   }
 
   return (
     <Dialog open={!!file} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-background bg-neutral-800 border-neutral-700">
+      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white border border-white/20 shadow-lg">
         <DialogHeader>
-          <DialogTitle>Confirm Deletion</DialogTitle>
-          <DialogDescription className='text-white'>
+          <DialogTitle className="text-2xl font-bold flex items-center">
+            <AlertTriangle className="w-6 h-6 text-yellow-500 mr-2" />
+            Confirm Deletion
+          </DialogTitle>
+          <DialogDescription className='text-white/80 mt-2'>
             Are you sure you want to delete the file "{file?.FileName.split('/').pop()}"? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose} disabled={isDeleting}>Cancel</Button>
-          <Button variant="destructive" onClick={handleDeleteConfirm} disabled={isDeleting}>
+        <DialogFooter className="mt-6 space-x-2">
+          <Button 
+            variant="outline" 
+            onClick={onClose} 
+            disabled={isDeleting}
+            className="bg-transparent border-white/30 text-white hover:bg-white/20"
+          >
+            Cancel
+          </Button>
+          <Button 
+            variant="destructive" 
+            onClick={handleDeleteConfirm} 
+            disabled={isDeleting}
+            className="bg-red-500 hover:bg-red-600 text-white"
+          >
             {isDeleting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -37,7 +37,7 @@ func RateLimitMiddleware() gin.HandlerFunc {
 		mu.Lock()
 		limiter, exists := userRateLimiters[userID]
 		if !exists {
-			limiter = rate.NewLimiter(rate.Every(time.Minute), 100)
+			limiter = rate.NewLimiter(rate.Every(time.Minute), 500)
 			userRateLimiters[userID] = limiter
 		}
 		mu.Unlock()

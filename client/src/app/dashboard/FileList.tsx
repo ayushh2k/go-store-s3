@@ -9,6 +9,7 @@ import FileRow from './FileRow'
 import DeleteDialog from './DeleteDialog'
 import ShareDialog from './ShareDialog'
 import UpdateDialog from './UpdateDialog'
+import { Loader2 } from 'lucide-react'
 
 interface FileData {
   ID: string;
@@ -28,9 +29,10 @@ interface ApiResponse {
 interface FileListProps {
   refreshTrigger: number;
   searchParams: { fileName: string; uploadedAt: string; contentType: string } | null;
+  onDelete: () => void;
 }
 
-export default function FileList({ refreshTrigger, searchParams }: FileListProps) {
+export default function FileList({ refreshTrigger, searchParams, onDelete }: FileListProps) {
   const [files, setFiles] = useState<FileData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -77,12 +79,16 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
   }
 
   if (isLoading) {
-    return <div>Loading files...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-white" />
+      </div>
+    )
   }
 
   if (error) {
     return (
-      <Alert variant="destructive">
+      <Alert variant="destructive" className="bg-red-500/20 border-red-500/50 text-white">
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     )
@@ -90,7 +96,7 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
 
   if (files.length === 0) {
     return (
-      <Alert>
+      <Alert className="bg-blue-500/20 border-blue-500/50 text-white">
         <AlertDescription>
           No files found. {searchParams ? 'Try a different search.' : 'Upload a file to get started.'}
         </AlertDescription>
@@ -99,15 +105,15 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
   }
 
   return (
-    <>
+    <div className="bg-white/10 backdrop-blur-lg rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Size</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Uploaded At</TableHead>
-            <TableHead>Actions</TableHead>
+          <TableRow className="border-b border-white/20">
+            <TableHead className="text-white">Name</TableHead>
+            <TableHead className="text-white">Size</TableHead>
+            <TableHead className="text-white">Type</TableHead>
+            <TableHead className="text-white">Uploaded At</TableHead>
+            <TableHead className="text-white">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -129,6 +135,7 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
         onDelete={async () => {
           await loadFiles()
           setFileToDelete(null)
+          onDelete()
         }}
       />
 
@@ -145,6 +152,6 @@ export default function FileList({ refreshTrigger, searchParams }: FileListProps
           setFileToUpdate(null)
         }}
       />
-    </>
+    </div>
   )
 }

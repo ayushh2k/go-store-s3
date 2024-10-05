@@ -5,39 +5,39 @@ import { LogIn, UserPlus, CloudUpload, Zap, Lock, Search } from 'lucide-react'
 
 export default function Home() {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-600 via-cyan-700 to-teal-700 animate-gradient-x">
-      <Card className="w-[600px] backdrop-blur-lg bg-white/20 border-white/50 shadow-xl transform transition-transform duration-300 hover:scale-105">
-        <CardHeader className="text-center">
-          <CardTitle className="text-4xl font-bold text-white mb-4 animate-pulse">
-            <CloudUpload className="inline-block mr-2 h-10 w-10" /> Go Store S3
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white">
+      <Card className="w-[600px] backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
+        <CardHeader className="text-center bg-white/5 pb-8">
+          <CardTitle className="text-5xl font-bold text-white mb-4">
+            <CloudUpload className="inline-block mr-3 h-12 w-12" /> Go Store S3
           </CardTitle>
-          <CardDescription className="text-xl text-white/80">
-            Manage Files with Ease on S3.
+          <CardDescription className="text-2xl text-white/80">
+            Manage Files with Ease on S3
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4 text-white">
-            <p className="text-center text-xl font-semibold">
+        <CardContent className="p-8">
+          <div className="space-y-6 text-white">
+            <p className="text-center text-2xl font-semibold">
               Get started with powerful features:
             </p>
-            <ul className="space-y-2">
-              <li className="flex items-center">
-                <Zap className="mr-2 h-6 w-6 text-blue-300" />
+            <ul className="space-y-4">
+              <li className="flex items-center text-lg">
+                <Zap className="mr-3 h-7 w-7 text-blue-300" />
                 Intelligent caching for instant access to frequent files
               </li>
-              <li className="flex items-center">
-                <Lock className="mr-2 h-6 w-6 text-blue-300" />
+              <li className="flex items-center text-lg">
+                <Lock className="mr-3 h-7 w-7 text-blue-300" />
                 Secure pre-signed share links
               </li>
-              <li className="flex items-center">
-                <Search className="mr-2 h-6 w-6 text-blue-300" />
+              <li className="flex items-center text-lg">
+                <Search className="mr-3 h-7 w-7 text-blue-300" />
                 Efficient search with smart filtering for quick retrieval
               </li>
             </ul>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button asChild size="lg" className="w-[45%] bg-white text-blue-600 hover:bg-blue-100 transition-all duration-300 transform hover:scale-105">
+        <CardFooter className="flex justify-between p-8 bg-white/5">
+          <Button asChild size="lg" className="w-[45%] bg-white text-blue-800 hover:bg-blue-100 transition-all duration-300 transform hover:scale-105">
             <Link href="/login" className="flex items-center justify-center">
               <LogIn className="mr-2 h-6 w-6" /> Login
             </Link>

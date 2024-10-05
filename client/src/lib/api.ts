@@ -61,11 +61,21 @@ export const updateFile = async (fileId: string, data: { file_name: string }) =>
 
 export async function fetchUserInfo() {
   try {
-    const [emailResponse, filesResponse, storageResponse] = await Promise.all([
-      fetchWithAuth('/user/email'),
-      fetchWithAuth('/user/total-files'),
-      fetchWithAuth('/user/storage-used')
-    ]);
+    const emailResponse = await fetchWithAuth('/user/email');
+    let filesResponse = { total_files: 0 };
+    let storageResponse = { storage_used: 0 };
+
+    try {
+      filesResponse = await fetchWithAuth('/user/total-files');
+    } catch (error) {
+      console.warn('Failed to fetch total files, defaulting to 0');
+    }
+
+    try {
+      storageResponse = await fetchWithAuth('/user/storage-used');
+    } catch (error) {
+      console.warn('Failed to fetch storage used, defaulting to 0');
+    }
 
     return {
       email: emailResponse.email,

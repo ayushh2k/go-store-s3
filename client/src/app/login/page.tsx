@@ -46,21 +46,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-600 via-cyan-700 to-teal-700 animate-gradient-x">
-      <Card className="w-[400px] backdrop-blur-lg bg-white/20 border-white/50 shadow-xl transform transition-transform duration-300 hover:scale-105">
-        <CardHeader className="text-center">
-          <CardTitle className="text-4xl font-bold text-white mb-4 animate-pulse">
-            <LogIn className="inline-block mr-2 h-10 w-10" /> Login
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white">
+      <Card className="w-[400px] backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
+        <CardHeader className="text-center bg-white/5 pb-8">
+          <CardTitle className="text-4xl font-bold text-white mb-4">
+            <LogIn className="inline-block mr-3 h-10 w-10" /> Login
           </CardTitle>
           <CardDescription className="text-white/80 text-xl">
             Enter your credentials
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6">
           <form onSubmit={handleSubmit}>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="email" className="text-white">Email</Label>
+            <div className="grid w-full items-center gap-6">
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="email" className="text-white text-lg">Email</Label>
                 <Input 
                   id="email" 
                   type="email" 
@@ -68,11 +68,11 @@ export default function LoginPage() {
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  className="bg-white/30 text-white placeholder-white/70"
+                  className="bg-white/20 text-white placeholder-white/50 border-white/30 focus:border-white/60 transition-all duration-300"
                 />
               </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password" className="text-white">Password</Label>
+              <div className="flex flex-col space-y-2">
+                <Label htmlFor="password" className="text-white text-lg">Password</Label>
                 <Input 
                   id="password" 
                   type="password" 
@@ -80,20 +80,20 @@ export default function LoginPage() {
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
-                  className="bg-white/30 text-white placeholder-white/70"
+                  className="bg-white/20 text-white placeholder-white/50 border-white/30 focus:border-white/60 transition-all duration-300"
                 />
               </div>
             </div>
           </form>
           {error && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertTitle className="text-white">Error</AlertTitle>
-              <AlertDescription className="text-white">{error}</AlertDescription>
+            <Alert variant="destructive" className="mt-6 bg-red-500/20 border-red-500/50">
+              <AlertTitle className="text-white font-semibold">Error</AlertTitle>
+              <AlertDescription className="text-white/90">{error}</AlertDescription>
             </Alert>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button onClick={handleSubmit} disabled={isLoading} size="lg" className="w-[45%] bg-white text-blue-600 hover:bg-blue-100 transition-all duration-300 transform hover:scale-105">
+        <CardFooter className="flex justify-between p-6 bg-white/5">
+          <Button onClick={handleSubmit} disabled={isLoading} size="lg" className="w-[45%] bg-white text-blue-800 hover:bg-blue-100 transition-all duration-300 transform hover:scale-105">
             <LogIn className="mr-2 h-6 w-6" /> {isLoading ? 'Logging in...' : 'Login'}
           </Button>
           <Button asChild size="lg" variant="outline" className="w-[45%] border-white text-white hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
