@@ -1,4 +1,4 @@
-module github.com/ayushh2k/21BKT0080_Backend
+module github.com/ayushh2k/go-store-s3/server
 
 go 1.23.0
 

@@ -4,8 +4,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/ws"
+	"github.com/ayushh2k/go-store-s3/server/internal/models"
+	"github.com/ayushh2k/go-store-s3/server/internal/ws"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"

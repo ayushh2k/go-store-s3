@@ -4,10 +4,10 @@ package main
 import (
 	"net/http"
 
-	"github.com/ayushh2k/21BKT0080_Backend/internal/handlers"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/middleware"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/workers"
+	"github.com/ayushh2k/go-store-s3/server/internal/handlers"
+	"github.com/ayushh2k/go-store-s3/server/internal/initializers"
+	"github.com/ayushh2k/go-store-s3/server/internal/middleware"
+	"github.com/ayushh2k/go-store-s3/server/internal/workers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -44,8 +44,7 @@ func main() {
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Trademarkia Backend Task: 21BKT0080 Ayush Mishra",
-			"github":  "https://github.com/ayushh2k/21BKT0080_Backend",
+			"message": "https://github.com/ayushh2k/go-store-s3",
 			"docs":    "https://documenter.getpostman.com/view/25648449/2sAXqp83yv",
 		})
 	})

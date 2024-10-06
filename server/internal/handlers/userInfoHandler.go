@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
+	"github.com/ayushh2k/go-store-s3/server/internal/initializers"
+	"github.com/ayushh2k/go-store-s3/server/internal/models"
 	"github.com/gin-gonic/gin"
 )
 

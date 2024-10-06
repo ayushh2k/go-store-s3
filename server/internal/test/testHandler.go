@@ -9,9 +9,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ayushh2k/21BKT0080_Backend/internal/handlers"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/initializers"
-	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
+	"github.com/ayushh2k/go-store-s3/server/internal/handlers"
+	"github.com/ayushh2k/go-store-s3/server/internal/initializers"
+	"github.com/ayushh2k/go-store-s3/server/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/bcrypt"

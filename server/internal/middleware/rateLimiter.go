@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ayushh2k/21BKT0080_Backend/internal/models"
+	"github.com/ayushh2k/go-store-s3/server/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"golang.org/x/time/rate"
