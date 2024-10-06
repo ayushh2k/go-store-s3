@@ -11,6 +11,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { UserPlus, LogIn, Loader2 } from 'lucide-react'
 
+const API_URL = process.env.API_URL || 'http://localhost:8080';
+
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -71,7 +73,7 @@ export default function RegisterPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/register', {
+      const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

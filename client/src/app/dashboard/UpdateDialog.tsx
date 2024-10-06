@@ -54,7 +54,7 @@ export default function UpdateDialog({ file, onClose, onUpdate }: UpdateDialogPr
             Update File Name
           </DialogTitle>
           <DialogDescription className='text-gray-400 mt-2'>
-            Enter a new name for the file "{file?.FileName.split('/').pop()}".
+            Enter a new name for the file &quot;{file?.FileName.split('/').pop()}&quot;.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -71,16 +71,16 @@ export default function UpdateDialog({ file, onClose, onUpdate }: UpdateDialogPr
           </div>
         </div>
         <DialogFooter className="space-x-2">
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
+          <Button
+            variant="outline"
+            onClick={onClose}
             disabled={isUpdating}
             className="bg-transparent border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/20"
           >
             Cancel
           </Button>
-          <Button 
-            onClick={handleUpdateConfirm} 
+          <Button
+            onClick={handleUpdateConfirm}
             disabled={isUpdating || newFileName.trim() === ''}
             className="bg-[#22c55e] hover:bg-[#1ea34b] text-white"
           >

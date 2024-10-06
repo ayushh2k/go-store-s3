@@ -1,3 +1,4 @@
+# server/Dockerfile
 FROM golang:alpine AS base
 
 WORKDIR /usr/src/app

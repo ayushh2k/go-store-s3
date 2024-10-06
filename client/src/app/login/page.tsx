@@ -11,6 +11,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { LogIn, UserPlus, Loader2 } from 'lucide-react'
 
+const API_URL = process.env.API_URL || 'http://localhost:8080';
+
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -24,7 +26,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('http://localhost:8080/login', {
+      const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -38,7 +40,7 @@ export default function LoginPage() {
         const data = await response.json()
         setError(data.message || 'Login failed')
       }
-    } catch (err) {
+    } catch (_) {
       setError('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)

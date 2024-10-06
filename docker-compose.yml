@@ -1,0 +1,56 @@
+services:
+  client:
+      build:
+        context: ./client
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./client:/app
+        - /app/node_modules
+      environment:
+      - API_URL=${API_URL}
+      env_file:
+        - .env
+      depends_on:
+        - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server:/usr/src/app
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    command: air ./server/cmd/main.go -b 0.0.0.0
+
+  db:
+    image: postgres:alpine
+    container_name: postgresql
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    env_file:
+      - .env
+      
+volumes:
+  postgres-db:

@@ -45,21 +45,21 @@ export default function DeleteDialog({ file, onClose, onDelete }: DeleteDialogPr
             Confirm Deletion
           </DialogTitle>
           <DialogDescription className='text-gray-400 mt-2'>
-            Are you sure you want to delete the file "{file?.FileName.split('/').pop()}"? This action cannot be undone.
+            Are you sure you want to delete the file &quot;{file?.FileName.split('/').pop()}&quot;? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-6 space-x-2">
-          <Button 
-            variant="outline" 
-            onClick={onClose} 
+          <Button
+            variant="outline"
+            onClick={onClose}
             disabled={isDeleting}
             className="bg-transparent border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/20"
           >
             Cancel
           </Button>
-          <Button 
-            variant="destructive" 
-            onClick={handleDeleteConfirm} 
+          <Button
+            variant="destructive"
+            onClick={handleDeleteConfirm}
             disabled={isDeleting}
             className="bg-red-500 hover:bg-red-600 text-white"
           >

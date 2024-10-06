@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:8080';
+// src/lib/api.ts
+
+const API_URL = process.env.API_URL || 'http://localhost:8080';
 
 async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('token');
@@ -43,20 +45,13 @@ export async function searchFiles(fileName: string, uploadedAt: string, contentT
 }
 
 export const updateFile = async (fileId: string, data: { file_name: string }) => {
-  const response = await fetch(`http://localhost:8080/files/${fileId}`, {
+  return fetchWithAuth(`/files/${fileId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
     },
     body: JSON.stringify(data),
   });
-
-  if (!response.ok) {
-    throw new Error('Failed to update file');
-  }
-
-  return await response.json();
 };
 
 export async function fetchUserInfo() {
@@ -67,13 +62,13 @@ export async function fetchUserInfo() {
 
     try {
       filesResponse = await fetchWithAuth('/user/total-files');
-    } catch (error) {
+    } catch (_) {
       console.warn('Failed to fetch total files, defaulting to 0');
     }
 
     try {
       storageResponse = await fetchWithAuth('/user/storage-used');
-    } catch (error) {
+    } catch (_) {
       console.warn('Failed to fetch storage used, defaulting to 0');
     }
 

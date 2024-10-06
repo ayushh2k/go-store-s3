@@ -19,5 +19,5 @@ vendor/
 
 # Exclude git history and configuration.
 .gitignore
-Dockerfile
-docker-compose.yml
+# Dockerfile
+# docker-compose.yml

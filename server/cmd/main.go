@@ -1,4 +1,4 @@
-// cmd/main.go
+// server/cmd/main.go
 package main
 
 import (
@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	initializers.LoadEnv()
+	// initializers.LoadEnv()
 	initializers.ConnectToDb()
 	initializers.ConnectS3()
 	initializers.ConnectRedis()
@@ -59,13 +59,13 @@ func main() {
 	// Start the background worker for file deletion
 	go workers.StartFileDeletionWorker()
 
-	r.Run(":8080")
+	r.Run("0.0.0.0:8080")
 }
 
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
 		if c.Request.Method == "OPTIONS" {

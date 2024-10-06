@@ -35,6 +35,8 @@ interface FileListProps {
 
 const ITEMS_PER_PAGE = 10;
 
+const API_URL = process.env.API_URL || 'http://localhost:8080';
+
 export default function FileList({ refreshTrigger, searchParams, onDelete }: FileListProps) {
   const [files, setFiles] = useState<FileData[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -45,6 +47,7 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
   const [currentPage, setCurrentPage] = useState(1)
   const [totalFiles, setTotalFiles] = useState(0)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     loadUserInfo()
     loadFiles()
@@ -63,7 +66,7 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
     setIsLoading(true)
     setError(null)
     try {
-      let url = 'http://localhost:8080/files'
+      let url = `${API_URL}/files`
       if (searchParams) {
         const searchQuery = new URLSearchParams()
         if (searchParams.fileName) {
@@ -76,7 +79,7 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
           searchQuery.append('content_type', searchParams.contentType)
         }
         if (searchQuery.toString()) {
-          url = `http://localhost:8080/search?${searchQuery.toString()}`
+          url = `${API_URL}/search?${searchQuery.toString()}`
         }
       }
       const response: ApiResponse = await fetchFiles(url)
