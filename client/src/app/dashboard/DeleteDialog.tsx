@@ -38,13 +38,13 @@ export default function DeleteDialog({ file, onClose, onDelete }: DeleteDialogPr
 
   return (
     <Dialog open={!!file} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white border border-white/20 shadow-lg">
+      <DialogContent className="sm:max-w-[425px] bg-[#242424] text-white border border-[#2a2a2a] shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center">
             <AlertTriangle className="w-6 h-6 text-yellow-500 mr-2" />
             Confirm Deletion
           </DialogTitle>
-          <DialogDescription className='text-white/80 mt-2'>
+          <DialogDescription className='text-gray-400 mt-2'>
             Are you sure you want to delete the file "{file?.FileName.split('/').pop()}"? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
@@ -53,7 +53,7 @@ export default function DeleteDialog({ file, onClose, onDelete }: DeleteDialogPr
             variant="outline" 
             onClick={onClose} 
             disabled={isDeleting}
-            className="bg-transparent border-white/30 text-white hover:bg-white/20"
+            className="bg-transparent border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/20"
           >
             Cancel
           </Button>

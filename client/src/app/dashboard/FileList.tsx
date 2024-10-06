@@ -3,13 +3,14 @@
 
 import { useState, useEffect } from 'react'
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { fetchFiles } from '@/lib/api'
+import { fetchFiles, fetchUserInfo } from '@/lib/api'
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import FileRow from './FileRow'
 import DeleteDialog from './DeleteDialog'
 import ShareDialog from './ShareDialog'
 import UpdateDialog from './UpdateDialog'
-import { Loader2 } from 'lucide-react'
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface FileData {
   ID: string;
@@ -32,6 +33,8 @@ interface FileListProps {
   onDelete: () => void;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 export default function FileList({ refreshTrigger, searchParams, onDelete }: FileListProps) {
   const [files, setFiles] = useState<FileData[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -39,10 +42,22 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
   const [fileToDelete, setFileToDelete] = useState<FileData | null>(null)
   const [fileToShare, setFileToShare] = useState<FileData | null>(null)
   const [fileToUpdate, setFileToUpdate] = useState<FileData | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalFiles, setTotalFiles] = useState(0)
 
   useEffect(() => {
+    loadUserInfo()
     loadFiles()
-  }, [refreshTrigger, searchParams])
+  }, [refreshTrigger, searchParams, currentPage])
+
+  const loadUserInfo = async () => {
+    try {
+      const userInfo = await fetchUserInfo()
+      setTotalFiles(userInfo.totalFiles)
+    } catch (error) {
+      console.error('Failed to fetch user info:', error)
+    }
+  }
 
   const loadFiles = async () => {
     setIsLoading(true)
@@ -78,17 +93,27 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
     }
   }
 
+  const totalPages = Math.ceil(totalFiles / ITEMS_PER_PAGE)
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1))
+  }
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+  }
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-white" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#22c55e]" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <Alert variant="destructive" className="bg-red-500/20 border-red-500/50 text-white">
+      <Alert variant="destructive" className="bg-red-500/20 border-red-500/50 text-red-400">
         <AlertDescription>{error}</AlertDescription>
       </Alert>
     )
@@ -96,7 +121,7 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
 
   if (files.length === 0) {
     return (
-      <Alert className="bg-blue-500/20 border-blue-500/50 text-white">
+      <Alert className="bg-[#22c55e]/20 border-[#22c55e]/50 text-[#22c55e]">
         <AlertDescription>
           No files found. {searchParams ? 'Try a different search.' : 'Upload a file to get started.'}
         </AlertDescription>
@@ -105,15 +130,15 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
   }
 
   return (
-    <div className="bg-white/10 backdrop-blur-lg rounded-lg overflow-hidden">
+    <div className="bg-[#242424] rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="border-b border-white/20">
-            <TableHead className="text-white">Name</TableHead>
-            <TableHead className="text-white">Size</TableHead>
-            <TableHead className="text-white">Type</TableHead>
-            <TableHead className="text-white">Uploaded At</TableHead>
-            <TableHead className="text-white">Actions</TableHead>
+          <TableRow className="border-b border-[#2a2a2a]">
+            <TableHead className="text-[#22c55e]">Name</TableHead>
+            <TableHead className="text-[#22c55e]">Size</TableHead>
+            <TableHead className="text-[#22c55e]">Type</TableHead>
+            <TableHead className="text-[#22c55e]">Uploaded At</TableHead>
+            <TableHead className="text-[#22c55e]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -129,11 +154,35 @@ export default function FileList({ refreshTrigger, searchParams, onDelete }: Fil
         </TableBody>
       </Table>
 
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4 px-4 py-2 border-t border-[#2a2a2a]">
+        <div className="text-gray-400">
+          Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, totalFiles)} of {totalFiles} files
+        </div>
+        <div className="flex space-x-2">
+          <Button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="bg-[#22c55e] hover:bg-[#1ea34b] text-white"
+          >
+            <ChevronLeft className="h-4 w-4 mr-2" /> Previous
+          </Button>
+          <Button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="bg-[#22c55e] hover:bg-[#1ea34b] text-white"
+          >
+            Next <ChevronRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </div>
+
       <DeleteDialog
         file={fileToDelete}
         onClose={() => setFileToDelete(null)}
         onDelete={async () => {
           await loadFiles()
+          await loadUserInfo()
           setFileToDelete(null)
           onDelete()
         }}

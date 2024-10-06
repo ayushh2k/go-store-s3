@@ -68,70 +68,74 @@ export default function DashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white">
+    <div className="min-h-screen bg-[#1c1c1c] text-white p-4">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-white">Go Store S3 Dashboard</h1>
-          <Button variant="outline" onClick={handleLogout} className="border-white text-white hover:bg-white/20 transition-all duration-300">
+          <h1 className="text-4xl font-bold text-[#22c55e]">Go Store S3 Dashboard</h1>
+          <Button variant="outline" onClick={handleLogout} className="border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-white transition-colors duration-300">
             <LogOut className="mr-2 h-5 w-5" /> Logout
           </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <Card className="col-span-1 lg:col-span-2 backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
-            <CardHeader className="bg-white/5">
-              <CardTitle className="text-2xl font-semibold text-white flex items-center">
-                <FileText className="mr-3 h-7 w-7" /> Stored Files
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <FileList refreshTrigger={refreshTrigger} searchParams={searchParams} onDelete={triggerRefresh} />
-            </CardContent>
-          </Card>
-
-          <div className="space-y-8">
-            <Card className="backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
-              <CardHeader className="bg-white/5">
+          <div className="lg:col-span-2">
+            <Card className="bg-[#242424] border-[#2a2a2a] shadow-xl rounded-xl overflow-hidden">
+              <CardHeader className="bg-[#1e1e1e]">
                 <CardTitle className="text-2xl font-semibold text-white flex items-center">
-                  <User className="mr-3 h-7 w-7" /> User Stats
+                  <FileText className="mr-3 h-5 w-5 text-[#22c55e]" /> Stored Files
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6">
-                {isLoading ? (
-                  <p className="text-white/80">Loading user information...</p>
-                ) : error ? (
-                  <p className="text-red-300">{error}</p>
-                ) : (
-                  <div className="space-y-2">
-                    <p className="text-white/90"><span className="font-semibold">Email:</span> {userInfo.email}</p>
-                    <p className="text-white/90"><span className="font-semibold">Total Files:</span> {userInfo.totalFiles}</p>
-                    <p className="text-white/90"><span className="font-semibold">Storage Used:</span> {formatBytes(userInfo.storageUsed)}</p>
-                  </div>
-                )}
+                <FileList refreshTrigger={refreshTrigger} searchParams={searchParams} onDelete={triggerRefresh} />
               </CardContent>
             </Card>
+          </div>
 
-            <Card className="backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
-              <CardHeader className="bg-white/5">
-                <CardTitle className="text-2xl font-semibold text-white flex items-center">
-                  <Upload className="mr-3 h-7 w-7" /> Upload File
+          <div className="space-y-6">
+
+            <Card className="bg-[#242424] border-[#2a2a2a] shadow-xl rounded-xl overflow-hidden">
+              <CardHeader className="bg-[#1e1e1e] py-4">
+                <CardTitle className="text-xl font-semibold text-white flex items-center">
+                  <Upload className="mr-2 h-5 w-5 text-[#22c55e]" /> Upload File
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <FileUpload onUploadSuccess={triggerRefresh} />
               </CardContent>
             </Card>
 
-            <Card className="backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
-              <CardHeader className="bg-white/5">
-                <CardTitle className="text-2xl font-semibold text-white flex items-center">
-                  <Search className="mr-3 h-7 w-7" /> Search Files
+            <Card className="bg-[#242424] border-[#2a2a2a] shadow-xl rounded-xl overflow-hidden">
+              <CardHeader className="bg-[#1e1e1e] py-4">
+                <CardTitle className="text-xl font-semibold text-white flex items-center">
+                  <Search className="mr-2 h-5 w-5 text-[#22c55e]" /> Search Files
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <SearchFiles onSearch={handleSearch} />
               </CardContent>
             </Card>
+
+            <Card className="bg-[#242424] border-[#2a2a2a] shadow-xl rounded-xl overflow-hidden">
+              <CardHeader className="bg-[#1e1e1e] py-4">
+                <CardTitle className="text-xl font-semibold text-white flex items-center">
+                  <User className="mr-2 h-5 w-5 text-[#22c55e]" /> User Stats
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                {isLoading ? (
+                  <p className="text-gray-400">Loading user information...</p>
+                ) : error ? (
+                  <p className="text-red-400">{error}</p>
+                ) : (
+                  <div className="space-y-1 text-sm">
+                    <p className="text-gray-300"><span className="font-semibold text-[#22c55e]">Email:</span> {userInfo.email}</p>
+                    <p className="text-gray-300"><span className="font-semibold text-[#22c55e]">Total Files:</span> {userInfo.totalFiles}</p>
+                    <p className="text-gray-300"><span className="font-semibold text-[#22c55e]">Storage Used:</span> {formatBytes(userInfo.storageUsed)}</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+            
           </div>
         </div>
       </div>

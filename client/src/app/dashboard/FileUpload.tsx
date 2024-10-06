@@ -50,7 +50,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
         <Button
           onClick={() => fileInputRef.current?.click()}
           variant="outline"
-          className="w-full text-white border-white/30 hover:bg-white/20 transition-all duration-300"
+          className="w-full text-[#22c55e] border-[#22c55e] hover:bg-[#22c55e] hover:text-white transition-all duration-300"
         >
           <File className="mr-2 h-5 w-5" />
           {file ? 'Change File' : 'Choose File'}
@@ -62,7 +62,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
           className="hidden"
         />
         {file && (
-          <div className="text-sm text-white/80 truncate">
+          <div className="text-sm text-gray-400 truncate">
             Selected: {file.name}
           </div>
         )}
@@ -70,7 +70,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
       <Button 
         onClick={handleUpload} 
         disabled={!file || isUploading}
-        className="w-full bg-white text-blue-800 hover:bg-blue-100 transition-all duration-300 transform hover:scale-105"
+        className="w-full bg-[#22c55e] text-white hover:bg-[#1ea34b] transition-all duration-300"
       >
         {isUploading ? (
           <>
@@ -88,8 +88,8 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
         <Alert 
           variant={uploadStatus.includes('success') ? 'default' : 'destructive'}
           className={uploadStatus.includes('success') 
-            ? "bg-green-500/20 border-green-500/50 text-white" 
-            : "bg-red-500/20 border-red-500/50 text-white"}
+            ? "bg-[#22c55e]/20 border-[#22c55e]/50 text-[#22c55e]" 
+            : "bg-red-500/20 border-red-500/50 text-red-400"}
         >
           <AlertTitle className="font-semibold">
             {uploadStatus.includes('success') ? 'Success' : 'Error'}

@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-        'gradient-x': 'gradient-x 15s ease infinite',
-        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        // 'gradient-x': 'gradient-x 15s ease infinite',
+        // 'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         'gradient-x': {

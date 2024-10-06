@@ -51,13 +51,13 @@ export default function ShareDialog({ file, onClose }: ShareDialogProps) {
 
   return (
     <Dialog open={!!file} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white border border-white/20 shadow-lg">
+      <DialogContent className="sm:max-w-[425px] bg-[#242424] text-white border border-[#2a2a2a] shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center">
-            <Share2 className="w-6 h-6 text-blue-400 mr-2" />
+            <Share2 className="w-6 h-6 text-[#22c55e] mr-2" />
             Share File
           </DialogTitle>
-          <DialogDescription className='text-white/80 mt-2'>
+          <DialogDescription className='text-gray-400 mt-2'>
             {shareLink 
               ? `Copy the link below to share your file. This link expires on ${shareExpiry}.` 
               : 'Generate a share link for your file.'}
@@ -68,7 +68,7 @@ export default function ShareDialog({ file, onClose }: ShareDialogProps) {
             <Button 
               onClick={handleShare} 
               disabled={isSharing}
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+              className="w-full bg-[#22c55e] hover:bg-[#1ea34b] text-white"
             >
               {isSharing ? (
                 <>
@@ -85,12 +85,12 @@ export default function ShareDialog({ file, onClose }: ShareDialogProps) {
               <Input
                 readOnly
                 value={shareLink}
-                className="flex-1 bg-white/20 border-white/30 text-white placeholder-white/50"
+                className="flex-1 bg-[#1e1e1e] border-[#2a2a2a] text-white placeholder-gray-500"
               />
               <Button 
                 size="sm" 
                 onClick={handleCopy}
-                className={`${isCopied ? 'bg-green-500' : 'bg-blue-500'} hover:bg-opacity-80 text-white`}
+                className={`${isCopied ? 'bg-green-500' : 'bg-[#22c55e]'} hover:bg-opacity-80 text-white`}
               >
                 {isCopied ? (
                   <Check className="h-4 w-4" />
@@ -105,7 +105,7 @@ export default function ShareDialog({ file, onClose }: ShareDialogProps) {
           <Button 
             variant="outline" 
             onClick={onClose}
-            className="bg-transparent border-white/30 text-white hover:bg-white/20"
+            className="bg-transparent border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e]/20"
           >
             Close
           </Button>

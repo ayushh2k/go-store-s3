@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { UserPlus, LogIn } from 'lucide-react'
+import { UserPlus, LogIn, Loader2 } from 'lucide-react'
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('')
@@ -92,17 +92,18 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-800 via-indigo-900 to-purple-900 text-white">
-      <Card className="w-[400px] backdrop-blur-lg bg-white/10 border-white/20 shadow-xl rounded-xl overflow-hidden">
-        <CardHeader className="text-center bg-white/5 pb-8">
+    <div className="flex justify-center items-center min-h-screen bg-[#1c1c1c] text-white p-4">
+      <Card className="w-full max-w-md bg-[#242424] border-[#2a2a2a] shadow-2xl rounded-2xl overflow-hidden">
+        <CardHeader className="text-center bg-[#1e1e1e] p-8">
+          <UserPlus className="h-20 w-20 text-[#22c55e] mx-auto mb-4" />
           <CardTitle className="text-4xl font-bold text-white mb-4">
-            <UserPlus className="inline-block mr-3 h-10 w-10" /> Register
+            Register
           </CardTitle>
-          <CardDescription className="text-white/80 text-xl">
+          <CardDescription className="text-xl text-gray-400">
             Create a new account
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-8">
           <form onSubmit={handleSubmit}>
             <div className="grid w-full items-center gap-6">
               <div className="flex flex-col space-y-2">
@@ -114,7 +115,7 @@ export default function RegisterPage() {
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  className="bg-white/20 text-white placeholder-white/50 border-white/30 focus:border-white/60 transition-all duration-300"
+                  className="bg-[#1e1e1e] text-white placeholder-gray-500 border-[#2a2a2a] focus:border-[#22c55e] transition-all duration-300"
                 />
               </div>
               <div className="flex flex-col space-y-2">
@@ -126,7 +127,7 @@ export default function RegisterPage() {
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
-                  className="bg-white/20 text-white placeholder-white/50 border-white/30 focus:border-white/60 transition-all duration-300"
+                  className="bg-[#1e1e1e] text-white placeholder-gray-500 border-[#2a2a2a] focus:border-[#22c55e] transition-all duration-300"
                 />
               </div>
             </div>
@@ -138,14 +139,29 @@ export default function RegisterPage() {
             </Alert>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between p-6 bg-white/5">
-          <Button asChild size="lg" variant="outline" className="w-[45%] border-white text-white hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
-            <Link href="/login" className="flex items-center justify-center">
-              <LogIn className="mr-2 h-6 w-6" /> Login
-            </Link>
+        <CardFooter className="flex flex-col space-y-4 p-8 bg-[#1e1e1e]">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={isLoading} 
+            size="lg" 
+            className="w-full bg-[#22c55e] hover:bg-[#1ea34b] text-white transition-colors duration-300"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Registering...
+              </>
+            ) : (
+              <>
+                <UserPlus className="mr-2 h-5 w-5" /> 
+                Register
+              </>
+            )}
           </Button>
-          <Button onClick={handleSubmit} disabled={isLoading} size="lg" className="w-[45%] bg-white text-blue-800 hover:bg-blue-100 transition-all duration-300 transform hover:scale-105">
-            <UserPlus className="mr-2 h-6 w-6" /> {isLoading ? 'Registering...' : 'Register'}
+          <Button asChild size="lg" variant="outline" className="w-full border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-white transition-colors duration-300">
+            <Link href="/login" className="flex items-center justify-center">
+              <LogIn className="mr-2 h-5 w-5" /> Login
+            </Link>
           </Button>
         </CardFooter>
       </Card>
