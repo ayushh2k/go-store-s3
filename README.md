@@ -90,12 +90,12 @@ Before you start, make sure you have the following installed:
 
 ## To-Do:
 
-    - [ ] Display upload progress using websockets
-    - [ ] Chunk encryption for multipart uploads
-    - [ ] Server side pagination
-    - [ ] Light Mode UI
-    - [X] Caching file metadata
-    - [X] Rate Limiting
+- [ ] Display upload progress using websockets
+- [ ] Chunk encryption for multipart uploads
+- [ ] Server side pagination
+- [ ] Light Mode UI
+- [X] Caching file metadata
+- [X] Rate Limiting
 	
 ## Screenshots:
 
